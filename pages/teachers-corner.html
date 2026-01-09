@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNS - Teachers Corner</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/teachers-corner.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="logo">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h1>Teachers Corner</h1>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn btn-icon" id="mainPageBtn" title="Main Page">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="btn btn-icon" id="helpButton" title="Help">
+            <i class="fas fa-question-circle"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- User Panel -->
+      <div class="user-panel" id="userPanel">
+        <div class="user-panel-header">
+          <h3>Teacher Profile</h3>
+          <button class="close-user-panel" id="closeUserPanel">×</button>
+        </div>
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h4 id="userName">Loading...</h4>
+          <p id="userEmail">Loading...</p>
+          <p id="userRole">Loading...</p>
+          <p id="adminStatus">Loading...</p>
+        </div>
+        <div class="user-actions">
+          <button class="btn btn-secondary btn-block" id="logoutButton">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="tabs">
+          <button class="tab active" data-tab="upload-notice">
+            Upload Notice
+          </button>
+          <button class="tab" data-tab="user-management">
+            User Management
+          </button>
+          <button class="tab" data-tab="department-management">
+            Department Management
+          </button>
+          <button class="tab" data-tab="notice-management">
+            Notice Management
+          </button>
+          <button class="tab" data-tab="queries-management">Queries Management</button>
+        </div>
+
+        <!-- Upload Notice Tab -->
+        <div class="tab-content active" id="upload-notice">
+          <div class="card">
+            <h3><i class="fas fa-upload"></i> Upload New Notice</h3>
+            <form id="uploadForm" enctype="multipart/form-data">
+              <label>Title *</label>
+              <input type="text" id="title" name="title" required />
+
+              <label>Keyword *</label>
+              <input type="text" id="keyword" name="keyword" required />
+
+              <label>Description *</label>
+              <textarea id="description" name="description" required></textarea>
+
+              <label>Valid Till *</label>
+              <input type="date" id="validTill" name="validTill" required />
+
+              <!-- Department -->
+              <label>Department</label>
+              <select id="deptSelect" required></select>
+              <input type="hidden" id="deptId" name="deptId" />
+              <input type="hidden" id="deptName" name="deptName" />
+
+              <!-- Uploader -->
+              <label>Uploader</label>
+              <select id="uploaderSelect" required></select>
+              <input type="hidden" id="uploaderId" name="uploaderId" />
+              <input type="hidden" id="uploadedByName" name="uploadedByName" />
+
+              <label>Attach File *</label>
+              <input type="file" id="file" name="file" required />
+
+              <button type="submit">Upload Notice</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- User Management Tab -->
+        <div class="tab-content" id="user-management">
+          <div class="card-grid">
+            <!-- Update Admin Status -->
+            <div class="card">
+              <h3><i class="fas fa-user-shield"></i> Update Admin Status</h3>
+              <form id="updateAdminForm">
+                <div class="form-group">
+                  <label for="adminUserSelect">Select User</label>
+                  <select id="adminUserSelect" required>
+                    <option value="">Select a teacher</option>
+                    <!-- Users will be populated via JavaScript -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="isAdmin">Admin Status</label>
+                  <select id="isAdmin" required>
+                    <option value="true">Make Admin</option>
+                    <option value="false">Remove Admin</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update Status
+                </button>
+              </form>
+            </div>
+
+            <!-- Update Student Password -->
+            <div class="card">
+              <h3><i class="fas fa-key"></i> Update Student Password</h3>
+              <form id="updatePasswordForm">
+                <div class="form-group">
+                  <label for="studentSearch">Search Student</label>
+                  <input
+                    type="text"
+                    id="studentSearch"
+                    placeholder="Search student by name or UID..."
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="studentSelect">Select Student</label>
+                  <select id="studentSelect" required>
+                    <option value="">Select a student</option>
+                    <!-- Students will be populated via JavaScript -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input type="password" id="newPassword" required />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update Password
+                </button>
+              </form>
+            </div>
+
+            <!-- Update Student Email -->
+            <div class="card">
+              <h3><i class="fas fa-envelope"></i> Update Student Email</h3>
+              <form id="updateEmailForm">
+                <div class="form-group">
+                  <label for="studentSearchEmail">Search Student</label>
+                  <input
+                    type="text"
+                    id="studentSearchEmail"
+                    placeholder="Search student by name or UID..."
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="studentSelectEmail">Select Student</label>
+                  <select id="studentSelectEmail" required>
+                    <option value="">Select a student</option>
+                    <!-- Students will be populated via JavaScript -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="newEmail">New Email</label>
+                  <input type="email" id="newEmail" required />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update Email
+                </button>
+              </form>
+            </div>
+
+            <!-- List Students by Department -->
+            <div class="card">
+              <h3><i class="fas fa-users"></i> List Students by Department</h3>
+              <form id="listStudentsForm">
+                <div class="form-group">
+                  <label for="deptSelectStudents">Select Department</label>
+                  <select id="deptSelectStudents" required>
+                    <option value="">Select department</option>
+                    <!-- Departments will be populated via JavaScript -->
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  List Students
+                </button>
+              </form>
+              <div class="student-list" id="studentList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Management Tab -->
+        <div class="tab-content" id="department-management">
+          <div class="card-grid">
+            <!-- Add New Department -->
+            <div class="card">
+              <h3><i class="fas fa-plus-circle"></i> Add New Department</h3>
+              <form id="addDeptForm">
+                <div class="form-group">
+                  <label for="newDeptInput">Department Name</label>
+                  <input
+                    type="text"
+                    id="newDeptInput"
+                    placeholder="Enter department name"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-success">
+                  Add Department
+                </button>
+              </form>
+            </div>
+
+            <!-- Update Department Name -->
+            <div class="card">
+              <h3><i class="fas fa-edit"></i> Update Department Name</h3>
+              <form id="updateDeptForm">
+                <div class="form-group">
+                  <label for="deptSelectUpdate">Select Department</label>
+                  <select id="deptSelectUpdate" required>
+                    <option value="">Select department</option>
+                    <!-- Departments will be populated via JavaScript -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="newDeptName">New Department Name</label>
+                  <input type="text" id="newDeptName" required />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update Department
+                </button>
+              </form>
+            </div>
+
+            <!-- Delete Department -->
+            <div class="card">
+              <h3><i class="fas fa-trash"></i> Delete Department</h3>
+              <form id="deleteDeptForm">
+                <div class="form-group">
+                  <label for="deptSelectDelete">Select Department</label>
+                  <select id="deptSelectDelete" required>
+                    <option value="">Select department</option>
+                    <!-- Departments will be populated via JavaScript -->
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-danger">
+                  Delete Department
+                </button>
+              </form>
+            </div>
+
+            <!-- Department List -->
+            <div class="card full-width">
+              <h3><i class="fas fa-list"></i> All Departments</h3>
+              <div class="dept-list" id="deptList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notice Management Tab -->
+<div class="tab-content" id="notice-management">
+  <div class="card-grid">
+
+    <!-- Search Notices -->
+    <div class="card full-width">
+      <h3><i class="fas fa-search"></i> Search Notices</h3>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="noticeSearch"
+          placeholder="Search notices by title..."
+        />
+        <button class="btn btn-primary" id="searchNoticesBtn">
+          Search
+        </button>
+      </div>
+
+      <!-- Scrollable notice list -->
+      <div class="notice-list-container">
+        <div class="notice-list" id="noticeList"></div>
+      </div>
+    </div>
+
+    <!-- Delete Notices -->
+    <div class="card full-width">
+      <h3><i class="fas fa-trash"></i> Delete Notices</h3>
+
+      <div class="form-group">
+        <label for="deleteNoticeId">Enter Notice ID to Delete</label>
+        <input
+          type="number"
+          id="deleteNoticeId"
+          placeholder="Enter Notice ID"
+          min="1"
+          required
+        />
+      </div>
+
+      <button id="deleteNoticeBtn" class="btn btn-danger">
+        Delete Notice
+      </button>
+    </div>
+
+    
+
+  </div>
+</div>
+
+<!-- Queries Management Tab -->
+<div class="tab-content" id="queries-management">
+  <div class="card-grid">
+    
+    <!-- Queries Filter and List -->
+    <div class="card full-width">
+      <h3><i class="fas fa-question-circle"></i> Student Queries</h3>
+      
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <div class="filter-controls">
+          <div class="form-group">
+            <label for="queryFilter">Filter by Status:</label>
+            <select id="queryFilter">
+              <option value="all">All Queries</option>
+              <option value="resolved">Resolved</option>
+              <option value="unresolved">Unresolved</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary" id="refreshQueriesBtn">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Queries Table -->
+      <div class="table-container">
+        <table class="queries-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Sent By</th>
+              <th>Created At</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="queryTableBody">
+            <!-- Rows will be dynamically rendered -->
+          </tbody>
+        </table>
+      </div>
+      
+      
+    </div>
+    <!-- Resolve Query Section -->
+<div class="card full-width">
+  <h3><i class="fas fa-check-circle"></i> Resolve Query</h3>
+  
+  <div class="resolve-form">
+    <div class="form-group">
+      <label for="resolveQueryId">Query ID:</label>
+      <input type="number" id="resolveQueryId" placeholder="Enter Query ID">
+    </div>
+    <div class="form-group">
+      <label for="resolvedBy">Resolved By:</label>
+       <select id="resolvedBy">
+    <option value="">Loading teachers...</option>
+  </select>
+    </div>
+    <button class="btn btn-success" id="resolveQueryBtn">
+      <i class="fas fa-check"></i> Mark as Resolved
+    </button>
+    <div id="resolveMsg" class="resolve-msg"></div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+    <!-- Verification Modal (on page load) -->
+    <div class="modal" id="verifyModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Teacher Verification</h3>
+          <button class="close-modal" id="closeVerifyModal">×</button>
+        </div>
+        <div class="modal-body">
+          <p>Please enter your credentials to access Teachers Corner:</p>
+          <div class="form-group">
+            <label for="verifyEmail">Email</label>
+            <input
+              type="email"
+              id="verifyEmail"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="verifyPassword">Password</label>
+            <input
+              type="password"
+              id="verifyPassword"
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelVerifyBtn">Cancel</button>
+          <button class="btn btn-primary" id="submitVerifyBtn">Verify</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Query Details Modal -->
+    <div class="modal" id="queryDetailsModal">
+      <div class="modal-card large-modal">
+        <div class="modal-header">
+          <h3>Query Details</h3>
+          <button class="close-modal" id="closeQueryModal">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="query-details">
+            <div class="detail-row">
+              <strong>Query ID:</strong>
+              <span id="detailQueryId"></span>
+            </div>
+            <div class="detail-row">
+              <strong>Sender Email:</strong>
+              <span id="detailSenderEmail"></span>
+            </div>
+            <div class="detail-row">
+              <strong>Title:</strong>
+              <span id="detailQueryTitle"></span>
+            </div>
+            <div class="detail-row">
+              <strong>Description:</strong>
+              <div class="query-description" id="detailQueryDescription"></div>
+            </div>
+            <div class="detail-row">
+              <strong>Created At:</strong>
+              <span id="detailCreatedAt"></span>
+            </div>
+            <div class="detail-row">
+              <strong>Status:</strong>
+              <span class="status-badge" id="detailStatus"></span>
+            </div>
+            <div class="detail-row" id="detailResolvedAtContainer" style="display: none;">
+              <strong>Resolved At:</strong>
+              <span id="detailResolvedAt"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="closeDetailsBtn">Close</button>
+          <button class="btn btn-primary" id="toggleResolveBtn">
+            <i class="fas fa-check-circle"></i> Mark as Resolved
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+      <span id="notificationMessage"></span>
+      <button class="close-notification" onclick="hideNotification()">×</button>
+    </div>
+
+    <!-- Query Details Modal -->
+<div id="queryModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h3>Query Details</h3>
+    <p><strong>ID:</strong> <span id="modalQueryId"></span></p>
+    <p><strong>Title:</strong> <span id="modalQueryTitle"></span></p>
+    <p><strong>Description:</strong> <span id="modalQueryDescription"></span></p>
+    <p><strong>Sent By:</strong> <span id="modalQuerySender"></span></p>
+    <p><strong>Created At:</strong> <span id="modalQueryCreatedAt"></span></p>
+    <p><strong>Status:</strong> <span id="modalQueryStatus"></span></p>
+    <p><strong>Resolved By:</strong> <span id="modalQueryResolvedBy"></span></p>
+  </div>
+</div>
+
+
+    <script type="module" src="../scripts/apis.js"></script>
+    <script type="module" src="../scripts/main.js"></script>
+    <script type="module" src="scripts/spinner-loader.js"></script>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNS - Notices</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="logo">
+            <i class="fas fa-bullhorn"></i>
+            <h1>Campus Notices</h1>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search notices by title..."
+            />
+            <button class="btn btn-primary" id="searchBtn">Search</button>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn btn-icon" id="helpButton" title="Help">
+            <i class="fas fa-question-circle"></i>
+          </button>
+          <button
+            class="btn btn-icon"
+            id="teachersCornerHeaderBtn"
+            title="Teachers Corner"
+          >
+            <i class="fas fa-chalkboard-teacher"></i>
+          </button>
+          <button class="btn btn-icon" id="userButton" title="User Profile">
+            <i class="fas fa-user-circle"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h3>Filters</h3>
+          <button class="close-sidebar" id="closeSidebar">×</button>
+        </div>
+
+        <div class="filter-section">
+          <!-- Filter 1: Department -->
+          <h4><i class="fas fa-building"></i> Filter by Department</h4>
+          <div class="filter-options" id="departmentFilter">
+            <div class="loading-small">Loading departments...</div>
+            <!-- Dropdown will be injected here by JS -->
+          </div>
+          <button class="btn btn-primary" id="applyDeptFilter">Apply</button>
+
+          <!-- Filter 2: Keyword -->
+          <h4><i class="fas fa-tags"></i> Filter by Keyword</h4>
+          <div class="keyword-filter">
+            <input
+              type="text"
+              id="keywordInput"
+              placeholder="Enter keyword..."
+              class="keyword-input"
+            />
+            <button class="btn btn-small" id="applyKeywordFilter">Apply</button>
+            <button class="btn btn-small btn-outline" id="clearKeywordFilter">
+              Clear
+            </button>
+          </div>
+
+          <!-- Filter 3: Date Range -->
+          <h4><i class="fas fa-calendar-alt"></i> Filter by Date Range</h4>
+          <div class="date-filter">
+            <div class="form-group">
+              <label for="fromDate">From Date</label>
+              <input type="date" id="fromDate" class="date-input" />
+            </div>
+            <div class="form-group">
+              <label for="toDate">To Date</label>
+              <input type="date" id="toDate" class="date-input" />
+            </div>
+            <button class="btn btn-secondary btn-block" id="applyDateFilter">
+              Apply Date Filter
+            </button>
+            <button class="btn btn-outline btn-block" id="clearFilters">
+              Clear All Filters
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- User Panel -->
+      <div class="user-panel" id="userPanel">
+        <div class="user-panel-header">
+          <h3>User Profile</h3>
+          <button class="close-user-panel" id="closeUserPanel">×</button>
+        </div>
+        <div class="user-info">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h4 id="userName">Loading...</h4>
+          <p id="userEmail">Loading...</p>
+          <p id="userRole">Loading...</p>
+        </div>
+        <div class="user-actions">
+          <button class="btn btn-secondary btn-block" id="logoutButton">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Notice Modal -->
+      <div class="notice-modal" id="noticeModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modalTitle"></h3>
+            <button class="close-modal" id="closeModal">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-field">
+              <strong>Keyword:</strong> <span id="modalKeyword"></span>
+            </div>
+            <div class="modal-field">
+              <strong>Department:</strong> <span id="modalDept"></span>
+            </div>
+            <div class="modal-field">
+              <strong>Uploaded By:</strong> <span id="modalUploadedBy"></span>
+            </div>
+            <div class="modal-field">
+              <strong>Valid Till:</strong> <span id="modalValidTill"></span>
+            </div>
+            <div class="modal-field">
+              <strong>Created At:</strong> <span id="modalCreatedAt"></span>
+            </div>
+            <div class="modal-field">
+              <strong>Description:</strong>
+              <p id="modalDescription"></p>
+            </div>
+            <div class="modal-field" id="modalFileUrl"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              id="downloadBtn"
+              style="display: none"
+            >
+              <i class="fas fa-download"></i> Download File
+            </button>
+            <button class="btn btn-outline" id="closeModalBtn">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="content-header">
+          <button class="btn btn-outline" id="openFiltersBtn">
+            <i class="fas fa-filter"></i> Apply Filters
+          </button>
+          <h2>Latest Notices</h2>
+          <div class="pagination-info" id="paginationInfo">Page 1 of 1</div>
+        </div>
+
+        <!-- Notices Container -->
+        <div class="notices-container" id="noticesContainer">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading notices...</p>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+          <button class="btn btn-outline" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Previous
+          </button>
+          <div class="page-numbers" id="pageNumbers"></div>
+          <button class="btn btn-outline" id="nextPage">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="../scripts/apis.js"></script>
+    <script type="module" src="../scripts/main.js"></script>
+    <script type="module" src="scripts/spinner-loader.js"></script>
+  </body>
+</html>

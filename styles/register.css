@@ -1,0 +1,67 @@
+/* Register Page Specific Styles */
+.register-card {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+}
+
+.register-card .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.register-card .logo i {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.register-card .subtitle {
+    color: var(--secondary);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.register-card .form-links {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+/* Mobile Responsiveness for Register */
+@media (max-width: 768px) {
+    .register-card {
+        margin: 20px auto;
+        padding: 24px;
+        max-width: 90%;
+    }
+    
+    .register-card .logo i {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        margin: 10px auto;
+        padding: 20px;
+        box-shadow: none;
+        background: transparent;
+        max-width: 100%;
+    }
+    
+    .form-actions {
+        gap: 10px;
+    }
+}

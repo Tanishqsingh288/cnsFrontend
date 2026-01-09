@@ -1,0 +1,160 @@
+/* Help Page Specific Styles */
+.help-card {
+    max-width: 800px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+}
+
+.help-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.help-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.help-header .logo i {
+    font-size: 2.5rem;
+    color: var(--primary);
+}
+
+.help-header .logo h1 {
+    margin: 0;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 30px 0;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.contact-header h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.75rem;
+}
+
+.contact-header p {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 10px auto 0;
+}
+
+/* Contact Form */
+#helpForm {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Character Count */
+.char-count {
+    text-align: right;
+    margin-top: 5px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Contact Info */
+.contact-info {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--background);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--primary);
+}
+
+.contact-info h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.contact-info ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.contact-info li {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-info li:before {
+    content: "•";
+    color: var(--primary);
+    font-weight: bold;
+}
+
+/* Mobile Responsiveness for Help Page */
+@media (max-width: 768px) {
+    .help-card {
+        margin: 20px auto;
+        padding: 24px;
+    }
+    
+    .help-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .help-header .logo {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .contact-header h2 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .contact-section {
+        padding: 20px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .help-card {
+        margin: 10px auto;
+        padding: 20px;
+        box-shadow: none;
+        background: transparent;
+    }
+    
+    .contact-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .contact-info {
+        padding: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}

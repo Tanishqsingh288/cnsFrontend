@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNS - Help & Support</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/help.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="help-card">
+            <!-- Header -->
+            <div class="help-header">
+                <div class="logo">
+                    <i class="fas fa-question-circle"></i>
+                    <h1>Help & Support</h1>
+                </div>
+                <a href="main.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Back to Main
+                </a>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-section">
+                <div class="contact-header">
+                    <h2><i class="fas fa-envelope"></i> Need Help? Contact Us</h2>
+                    <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+                </div>
+                
+                <form id="helpForm">
+                    <div class="form-group">
+                        <label for="helpTitle">
+                            <i class="fas fa-heading"></i> Subject *
+                        </label>
+                        <input type="text" id="helpTitle" name="title" 
+                               placeholder="Enter subject of your query" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="helpEmail">
+                            <i class="fas fa-envelope"></i> Your Email *
+                        </label>
+                        <input type="email" id="helpEmail" name="email" 
+                               placeholder="Enter your email address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="helpDescription">
+                            <i class="fas fa-comment-dots"></i> Description *
+                        </label>
+                        <textarea id="helpDescription" name="description" rows="8" 
+                                  placeholder="Describe your issue or question in detail..." required></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span> characters
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-eraser"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="contact-info">
+                    <h3><i class="fas fa-info-circle"></i> Important Information</h3>
+                    <ul>
+                        <li>Response time: Usually within 24 hours</li>
+                        <li>Check your email for updates</li>
+                        <li>For urgent matters, contact the system administrator directly</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div class="notification" id="notification">
+            <span id="notificationMessage"></span>
+            <button class="close-notification" onclick="hideNotification()">×</button>
+        </div>
+    </div>
+
+    <script type="module" src="../scripts/main.js"></script>
+</body>
+</html>
