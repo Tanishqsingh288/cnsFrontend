@@ -72,7 +72,9 @@
           <button class="tab" data-tab="notice-management">
             Notice Management
           </button>
-          <button class="tab" data-tab="queries-management">Queries Management</button>
+          <button class="tab" data-tab="queries-management">
+            Queries Management
+          </button>
         </div>
 
         <!-- Upload Notice Tab -->
@@ -123,7 +125,6 @@
                   <label for="adminUserSelect">Select User</label>
                   <select id="adminUserSelect" required>
                     <option value="">Select a teacher</option>
-                    <!-- Users will be populated via JavaScript -->
                   </select>
                 </div>
                 <div class="form-group">
@@ -155,7 +156,6 @@
                   <label for="studentSelect">Select Student</label>
                   <select id="studentSelect" required>
                     <option value="">Select a student</option>
-                    <!-- Students will be populated via JavaScript -->
                   </select>
                 </div>
                 <div class="form-group">
@@ -184,7 +184,6 @@
                   <label for="studentSelectEmail">Select Student</label>
                   <select id="studentSelectEmail" required>
                     <option value="">Select a student</option>
-                    <!-- Students will be populated via JavaScript -->
                   </select>
                 </div>
                 <div class="form-group">
@@ -205,7 +204,6 @@
                   <label for="deptSelectStudents">Select Department</label>
                   <select id="deptSelectStudents" required>
                     <option value="">Select department</option>
-                    <!-- Departments will be populated via JavaScript -->
                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary">
@@ -247,7 +245,6 @@
                   <label for="deptSelectUpdate">Select Department</label>
                   <select id="deptSelectUpdate" required>
                     <option value="">Select department</option>
-                    <!-- Departments will be populated via JavaScript -->
                   </select>
                 </div>
                 <div class="form-group">
@@ -268,7 +265,6 @@
                   <label for="deptSelectDelete">Select Department</label>
                   <select id="deptSelectDelete" required>
                     <option value="">Select department</option>
-                    <!-- Departments will be populated via JavaScript -->
                   </select>
                 </div>
                 <button type="submit" class="btn btn-danger">
@@ -286,232 +282,246 @@
         </div>
 
         <!-- Notice Management Tab -->
-<div class="tab-content" id="notice-management">
-  <div class="card-grid">
+        <div class="tab-content" id="notice-management">
+          <div class="card-grid">
+            <!-- Search Notices -->
+            <div class="card full-width">
+              <h3><i class="fas fa-search"></i> Search Notices</h3>
+              <div class="search-box">
+                <input
+                  type="text"
+                  id="noticeSearch"
+                  placeholder="Search notices by title..."
+                />
+                <button class="btn btn-primary" id="searchNoticesBtn">
+                  Search
+                </button>
+              </div>
+              <div class="notice-list-container">
+                <div class="notice-list" id="noticeList"></div>
+              </div>
+            </div>
 
-    <!-- Search Notices -->
-    <div class="card full-width">
-      <h3><i class="fas fa-search"></i> Search Notices</h3>
-
-      <div class="search-box">
-        <input
-          type="text"
-          id="noticeSearch"
-          placeholder="Search notices by title..."
-        />
-        <button class="btn btn-primary" id="searchNoticesBtn">
-          Search
-        </button>
-      </div>
-
-      <!-- Scrollable notice list -->
-      <div class="notice-list-container">
-        <div class="notice-list" id="noticeList"></div>
-      </div>
-    </div>
-
-    <!-- Delete Notices -->
-    <div class="card full-width">
-      <h3><i class="fas fa-trash"></i> Delete Notices</h3>
-
-      <div class="form-group">
-        <label for="deleteNoticeId">Enter Notice ID to Delete</label>
-        <input
-          type="number"
-          id="deleteNoticeId"
-          placeholder="Enter Notice ID"
-          min="1"
-          required
-        />
-      </div>
-
-      <button id="deleteNoticeBtn" class="btn btn-danger">
-        Delete Notice
-      </button>
-    </div>
-
-    
-
-  </div>
-</div>
-
-<!-- Queries Management Tab -->
-<div class="tab-content" id="queries-management">
-  <div class="card-grid">
-    
-    <!-- Queries Filter and List -->
-    <div class="card full-width">
-      <h3><i class="fas fa-question-circle"></i> Student Queries</h3>
-      
-      <!-- Filter Section -->
-      <div class="filter-section">
-        <div class="filter-controls">
-          <div class="form-group">
-            <label for="queryFilter">Filter by Status:</label>
-            <select id="queryFilter">
-              <option value="all">All Queries</option>
-              <option value="resolved">Resolved</option>
-              <option value="unresolved">Unresolved</option>
-            </select>
-          </div>
-          <button class="btn btn-secondary" id="refreshQueriesBtn">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
-        </div>
-      </div>
-
-      <!-- Scrollable Queries Table -->
-      <div class="table-container">
-        <table class="queries-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Sent By</th>
-              <th>Created At</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="queryTableBody">
-            <!-- Rows will be dynamically rendered -->
-          </tbody>
-        </table>
-      </div>
-      
-      
-    </div>
-    <!-- Resolve Query Section -->
-<div class="card full-width">
-  <h3><i class="fas fa-check-circle"></i> Resolve Query</h3>
-  
-  <div class="resolve-form">
-    <div class="form-group">
-      <label for="resolveQueryId">Query ID:</label>
-      <input type="number" id="resolveQueryId" placeholder="Enter Query ID">
-    </div>
-    <div class="form-group">
-      <label for="resolvedBy">Resolved By:</label>
-       <select id="resolvedBy">
-    <option value="">Loading teachers...</option>
-  </select>
-    </div>
-    <button class="btn btn-success" id="resolveQueryBtn">
-      <i class="fas fa-check"></i> Mark as Resolved
-    </button>
-    <div id="resolveMsg" class="resolve-msg"></div>
-  </div>
-</div>
-
-  </div>
-</div>
-
-
-  </div>
-</div>
-
-    <!-- Verification Modal (on page load) -->
-    <div class="modal" id="verifyModal">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h3>Teacher Verification</h3>
-          <button class="close-modal" id="closeVerifyModal">×</button>
-        </div>
-        <div class="modal-body">
-          <p>Please enter your credentials to access Teachers Corner:</p>
-          <div class="form-group">
-            <label for="verifyEmail">Email</label>
-            <input
-              type="email"
-              id="verifyEmail"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="verifyPassword">Password</label>
-            <input
-              type="password"
-              id="verifyPassword"
-              placeholder="Enter your password"
-            />
+            <!-- Delete Notices -->
+            <div class="card full-width">
+              <h3><i class="fas fa-trash"></i> Delete Notices</h3>
+              <div class="form-group">
+                <label for="deleteNoticeId">Enter Notice ID to Delete</label>
+                <input
+                  type="number"
+                  id="deleteNoticeId"
+                  placeholder="Enter Notice ID"
+                  min="1"
+                  required
+                />
+              </div>
+              <button id="deleteNoticeBtn" class="btn btn-danger">
+                Delete Notice
+              </button>
+            </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" id="cancelVerifyBtn">Cancel</button>
-          <button class="btn btn-primary" id="submitVerifyBtn">Verify</button>
+
+        <!-- Queries Management Tab -->
+        <div class="tab-content" id="queries-management">
+          <div class="card-grid">
+            <!-- Queries Filter and List -->
+            <div class="card full-width">
+              <h3><i class="fas fa-question-circle"></i> Student Queries</h3>
+              <div class="filter-section">
+                <div class="filter-controls">
+                  <div class="form-group">
+                    <label for="queryFilter">Filter by Status:</label>
+                    <select id="queryFilter">
+                      <option value="all">All Queries</option>
+                      <option value="resolved">Resolved</option>
+                      <option value="unresolved">Unresolved</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-secondary" id="refreshQueriesBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                  </button>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="queries-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Sent By</th>
+                      <th>Created At</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="queryTableBody">
+                    <!-- Rows will be dynamically rendered -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Download Query Report Section -->
+            <div class="card full-width">
+              <h3><i class="fas fa-file-pdf"></i> Download Query Report</h3>
+              <div class="download-form">
+                <div class="form-group">
+                  <label for="downloadQueryId">Query ID:</label>
+                  <input
+                    type="number"
+                    id="downloadQueryId"
+                    placeholder="Enter Query ID"
+                  />
+                </div>
+                <button class="btn btn-primary" id="downloadReportBtn">
+                  <i class="fas fa-download"></i> Download Report
+                </button>
+                <div id="downloadMsg" class="form-msg"></div>
+              </div>
+            </div>
+
+            <!-- Resolve Query Section -->
+            <div class="card full-width">
+              <h3><i class="fas fa-check-circle"></i> Resolve Query</h3>
+              <div class="resolve-form">
+                <div class="form-group">
+                  <label for="resolveQueryId">Query ID:</label>
+                  <input
+                    type="number"
+                    id="resolveQueryId"
+                    placeholder="Enter Query ID"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="resolvedBy">Resolved By:</label>
+                  <select id="resolvedBy">
+                    <option value="">Loading teachers...</option>
+                  </select>
+                </div>
+                <button class="btn btn-success" id="resolveQueryBtn">
+                  <i class="fas fa-check"></i> Mark as Resolved
+                </button>
+                <div id="resolveMsg" class="resolve-msg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Verification Modal -->
+      <div class="modal" id="verifyModal">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3>Teacher Verification</h3>
+            <button class="close-modal" id="closeVerifyModal">×</button>
+          </div>
+          <div class="modal-body">
+            <p>Please enter your credentials to access Teachers Corner:</p>
+            <div class="form-group">
+              <label for="verifyEmail">Email</label>
+              <input
+                type="email"
+                id="verifyEmail"
+                placeholder="Enter your email"
+              />
+            </div>
+            <div class="form-group">
+              <label for="verifyPassword">Password</label>
+              <input
+                type="password"
+                id="verifyPassword"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelVerifyBtn">Cancel</button>
+            <button class="btn btn-primary" id="submitVerifyBtn">Verify</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Query Details Modal -->
-    <div class="modal" id="queryDetailsModal">
-      <div class="modal-card large-modal">
-        <div class="modal-header">
+      <!-- Query Details Modal -->
+      <div class="modal" id="queryDetailsModal">
+        <div class="modal-card large-modal">
+          <div class="modal-header">
+            <h3>Query Details</h3>
+            <button class="close-modal" id="closeQueryModal">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="query-details">
+              <div class="detail-row">
+                <strong>Query ID:</strong>
+                <span id="detailQueryId"></span>
+              </div>
+              <div class="detail-row">
+                <strong>Sender Email:</strong>
+                <span id="detailSenderEmail"></span>
+              </div>
+              <div class="detail-row">
+                <strong>Title:</strong>
+                <span id="detailQueryTitle"></span>
+              </div>
+              <div class="detail-row">
+                <strong>Description:</strong>
+                <div class="query-description" id="detailQueryDescription"></div>
+              </div>
+              <div class="detail-row">
+                <strong>Created At:</strong>
+                <span id="detailCreatedAt"></span>
+              </div>
+              <div class="detail-row">
+                <strong>Status:</strong>
+                <span class="status-badge" id="detailStatus"></span>
+              </div>
+              <div
+                class="detail-row"
+                id="detailResolvedAtContainer"
+                style="display: none"
+              >
+                <strong>Resolved At:</strong>
+                <span id="detailResolvedAt"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeDetailsBtn">Close</button>
+            <button class="btn btn-primary" id="toggleResolveBtn">
+              <i class="fas fa-check-circle"></i> Mark as Resolved
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      <div class="notification" id="notification">
+        <span id="notificationMessage"></span>
+        <button class="close-notification" onclick="hideNotification()">×</button>
+      </div>
+
+      <!-- Query Details Modal (Duplicate - keep as is) -->
+      <div id="queryModal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
           <h3>Query Details</h3>
-          <button class="close-modal" id="closeQueryModal">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="query-details">
-            <div class="detail-row">
-              <strong>Query ID:</strong>
-              <span id="detailQueryId"></span>
-            </div>
-            <div class="detail-row">
-              <strong>Sender Email:</strong>
-              <span id="detailSenderEmail"></span>
-            </div>
-            <div class="detail-row">
-              <strong>Title:</strong>
-              <span id="detailQueryTitle"></span>
-            </div>
-            <div class="detail-row">
-              <strong>Description:</strong>
-              <div class="query-description" id="detailQueryDescription"></div>
-            </div>
-            <div class="detail-row">
-              <strong>Created At:</strong>
-              <span id="detailCreatedAt"></span>
-            </div>
-            <div class="detail-row">
-              <strong>Status:</strong>
-              <span class="status-badge" id="detailStatus"></span>
-            </div>
-            <div class="detail-row" id="detailResolvedAtContainer" style="display: none;">
-              <strong>Resolved At:</strong>
-              <span id="detailResolvedAt"></span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" id="closeDetailsBtn">Close</button>
-          <button class="btn btn-primary" id="toggleResolveBtn">
-            <i class="fas fa-check-circle"></i> Mark as Resolved
-          </button>
+          <p><strong>ID:</strong> <span id="modalQueryId"></span></p>
+          <p><strong>Title:</strong> <span id="modalQueryTitle"></span></p>
+          <p>
+            <strong>Description:</strong>
+            <span id="modalQueryDescription"></span>
+          </p>
+          <p><strong>Sent By:</strong> <span id="modalQuerySender"></span></p>
+          <p>
+            <strong>Created At:</strong> <span id="modalQueryCreatedAt"></span>
+          </p>
+          <p><strong>Status:</strong> <span id="modalQueryStatus"></span></p>
+          <p>
+            <strong>Resolved By:</strong> <span id="modalQueryResolvedBy"></span>
+          </p>
         </div>
       </div>
     </div>
-
-    <!-- Notification -->
-    <div class="notification" id="notification">
-      <span id="notificationMessage"></span>
-      <button class="close-notification" onclick="hideNotification()">×</button>
-    </div>
-
-    <!-- Query Details Modal -->
-<div id="queryModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h3>Query Details</h3>
-    <p><strong>ID:</strong> <span id="modalQueryId"></span></p>
-    <p><strong>Title:</strong> <span id="modalQueryTitle"></span></p>
-    <p><strong>Description:</strong> <span id="modalQueryDescription"></span></p>
-    <p><strong>Sent By:</strong> <span id="modalQuerySender"></span></p>
-    <p><strong>Created At:</strong> <span id="modalQueryCreatedAt"></span></p>
-    <p><strong>Status:</strong> <span id="modalQueryStatus"></span></p>
-    <p><strong>Resolved By:</strong> <span id="modalQueryResolvedBy"></span></p>
-  </div>
-</div>
-
 
     <script type="module" src="../scripts/apis.js"></script>
     <script type="module" src="../scripts/main.js"></script>

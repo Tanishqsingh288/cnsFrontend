@@ -25,7 +25,8 @@ import { loginUser,
     getQueryById,
     submitHelpQuery,
     logoutUser,
-    resetPassword
+    resetPassword,
+    downloadQueryReport
 } from "./apis.js";
 
 /* =====================================================
@@ -702,6 +703,7 @@ function initPagination() {
             if (currentPage > 1) {
                 currentPage--;
                 displayNotices();
+                updatePagination(); // Update button states
             }
         };
     }
@@ -711,6 +713,7 @@ function initPagination() {
             if (currentPage < totalPages) {
                 currentPage++;
                 displayNotices();
+                updatePagination(); // Update button states
             }
         };
     }
@@ -718,8 +721,94 @@ function initPagination() {
 
 function updatePagination() {
     const paginationInfo = document.getElementById('paginationInfo');
+    const prevPage = document.getElementById('prevPage');
+    const nextPage = document.getElementById('nextPage');
+    
+    // Update page info text
     if (paginationInfo) {
         paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+    
+    // Update button disabled states
+    if (prevPage) {
+        prevPage.disabled = currentPage <= 1;
+    }
+    
+    if (nextPage) {
+        nextPage.disabled = currentPage >= totalPages;
+    }
+    
+    // Also update page numbers display if you have that
+    updatePageNumbers();
+}
+
+// Optional: Add page number buttons
+function updatePageNumbers() {
+    const pageNumbers = document.getElementById('pageNumbers');
+    if (!pageNumbers) return;
+    
+    pageNumbers.innerHTML = '';
+    
+    // Show max 5 page numbers
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+    }
+    
+    // First page button
+    if (startPage > 1) {
+        const firstBtn = document.createElement('button');
+        firstBtn.className = 'btn btn-outline page-number';
+        firstBtn.textContent = '1';
+        firstBtn.onclick = () => {
+            currentPage = 1;
+            displayNotices();
+            updatePagination();
+        };
+        pageNumbers.appendChild(firstBtn);
+        
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pageNumbers.appendChild(ellipsis);
+        }
+    }
+    
+    // Page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-outline'} page-number`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+            currentPage = i;
+            displayNotices();
+            updatePagination();
+        };
+        pageNumbers.appendChild(pageBtn);
+    }
+    
+    // Last page button
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pageNumbers.appendChild(ellipsis);
+        }
+        
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'btn btn-outline page-number';
+        lastBtn.textContent = totalPages;
+        lastBtn.onclick = () => {
+            currentPage = totalPages;
+            displayNotices();
+            updatePagination();
+        };
+        pageNumbers.appendChild(lastBtn);
     }
 }
 
@@ -2283,6 +2372,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+document.getElementById('downloadReportBtn').addEventListener('click', async () => {
+    const idInput = document.getElementById('downloadQueryId');
+    const msgDiv = document.getElementById('downloadMsg');
+    const id = idInput.value.trim();
+
+    if (!id) {
+        msgDiv.textContent = "Please enter a Query ID";
+        return;
+    }
+
+    msgDiv.textContent = "";
+
+    try {
+        await downloadQueryReport(id);
+        msgDiv.style.color = 'green';
+        msgDiv.textContent = `Query report downloaded successfully.`;
+    } catch (err) {
+        msgDiv.style.color = 'red';
+        msgDiv.textContent = `Failed to download report. Check the ID.`;
+    }
+});
 
 // ================= GLOBAL EXPORTS =================
 window.displayNotices = displayNotices;

@@ -609,3 +609,32 @@ export async function resetPassword(email, newPassword, confirmPassword) {
         throw error;
     }
 }
+
+/**
+ * Download PDF report of a query by ID
+ * @param {number} id 
+ */
+export async function downloadQueryReport(id) {
+    try {
+        const response = await fetch(`${SHORT_BASE_URL}/pdf/query/${id}`, {
+            method: 'GET',
+        });
+
+        if (!response.ok) throw new Error("Failed to download report");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `query_${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
