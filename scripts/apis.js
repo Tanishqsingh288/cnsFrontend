@@ -242,6 +242,12 @@ export async function uploadNotice(formData) {
             formData.set('validTillAsInstant', instant);
         }
 
+        // Get session value
+        const session = formData.get('session');
+        if (!session || session.trim() === '') {
+            throw new Error('Session is required');
+        }
+
         const response = await fetch(`${BASE_URL}/notices/file/upload`, {
             method: 'POST',
             body: formData
@@ -635,6 +641,59 @@ export async function downloadQueryReport(id) {
 
     } catch (error) {
         console.error(error);
+        throw error;
+    }
+}
+// Function to download department report PDF
+export async function downloadDepartmentReport(deptId) {
+    try {
+        // Show loading notification
+        showNotification('Generating PDF report...', 'info');
+        
+        // Call the PDF API
+        const response = await fetch(`${SHORT_BASE_URL}/pdf/department/${deptId}/report`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/pdf'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to generate report: ${response.status} ${response.statusText}`);
+        }
+        
+        // Get filename from Content-Disposition header or create default
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = `department_${deptId}_notice_report.pdf`;
+        
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (filenameMatch && filenameMatch[1]) {
+                filename = filenameMatch[1];
+            }
+        }
+        
+        // Create blob from response
+        const blob = await response.blob();
+        
+        // Create download link and trigger download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        
+        showNotification('Report downloaded successfully!', 'success');
+        return true;
+        
+    } catch (error) {
+        console.error('Error downloading department report:', error);
+        showNotification(`Failed to download report: ${error.message}`, 'error');
         throw error;
     }
 }

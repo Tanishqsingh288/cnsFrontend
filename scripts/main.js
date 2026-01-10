@@ -26,7 +26,8 @@ import { loginUser,
     submitHelpQuery,
     logoutUser,
     resetPassword,
-    downloadQueryReport
+    downloadQueryReport,
+    downloadDepartmentReport
 } from "./apis.js";
 
 /* =====================================================
@@ -958,6 +959,7 @@ async function initTeachersCorner() {
                             initDepartmentList();
                             initNoticeManagement();
                             initDeleteNotice();
+                             initDepartmentReportDownload();
 
                         } else {
                             showNotification("Unauthorized! You are not privileged to access this page.", "error");
@@ -987,6 +989,7 @@ async function initTeachersCorner() {
     initDepartmentList();
     initNoticeManagement();
     initDeleteNotice();
+     initDepartmentReportDownload();
 }
 // ================= UPLOAD NOTICE FORM =================
 async function initUploadNoticeForm() {
@@ -2393,6 +2396,97 @@ document.getElementById('downloadReportBtn').addEventListener('click', async () 
         msgDiv.textContent = `Failed to download report. Check the ID.`;
     }
 });
+
+// ================= DEPARTMENT REPORT DOWNLOAD =================
+async function initDepartmentReportDownload() {
+    const form = document.getElementById('downloadDeptReportForm');
+    const deptSelect = document.getElementById('deptSelectReport');
+    const deptIdDisplay = document.getElementById('deptIdDisplay');
+    const msgDiv = document.getElementById('reportDownloadMsg');
+    
+    if (!form || !deptSelect || !deptIdDisplay) {
+        console.error('Department report download elements not found');
+        return;
+    }
+    
+    // Populate department dropdown
+    try {
+        const departments = await getActiveDepartmentNames();
+        deptSelect.innerHTML = '<option value="">Select department</option>';
+        
+        departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.id;
+            option.textContent = `${dept.name} (ID: ${dept.id})`;
+            option.setAttribute('data-name', dept.name);
+            deptSelect.appendChild(option);
+        });
+        
+        // Update department ID display when selection changes
+        deptSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const deptId = this.value;
+            const deptName = selectedOption ? selectedOption.getAttribute('data-name') : '';
+            
+            deptIdDisplay.value = deptId || '';
+        });
+        
+    } catch (error) {
+        console.error('Failed to load departments for report:', error);
+        deptSelect.innerHTML = '<option value="">Failed to load departments</option>';
+    }
+    
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const deptId = deptSelect.value;
+        
+        if (!deptId) {
+            showNotification('Please select a department', 'error');
+            return;
+        }
+        
+        try {
+            // Show loading message
+            if (msgDiv) {
+                msgDiv.textContent = 'Generating PDF report...';
+                msgDiv.className = 'form-msg info';
+            }
+            
+            // Generate and download PDF
+            await downloadDepartmentReport(deptId);
+            
+            // Clear form
+            deptSelect.value = '';
+            deptIdDisplay.value = '';
+            
+            // Show success message
+            if (msgDiv) {
+                msgDiv.textContent = 'Report downloaded successfully!';
+                msgDiv.className = 'form-msg success';
+                
+                // Clear message after 3 seconds
+                setTimeout(() => {
+                    msgDiv.textContent = '';
+                    msgDiv.className = 'form-msg';
+                }, 3000);
+            }
+            
+        } catch (error) {
+            console.error('Failed to download report:', error);
+            
+            if (msgDiv) {
+                msgDiv.textContent = 'Failed to download report. Please try again.';
+                msgDiv.className = 'form-msg error';
+            }
+            
+            showNotification('Failed to download report', 'error');
+        }
+    });
+}
+
+
 
 // ================= GLOBAL EXPORTS =================
 window.displayNotices = displayNotices;
