@@ -27,7 +27,8 @@ import { loginUser,
     logoutUser,
     resetPassword,
     downloadQueryReport,
-    downloadDepartmentReport
+    downloadDepartmentReport,
+    downloadDepartmentNoticeReport
 } from "./apis.js";
 
 /* =====================================================
@@ -960,6 +961,9 @@ async function initTeachersCorner() {
                             initNoticeManagement();
                             initDeleteNotice();
                              initDepartmentReportDownload();
+                             initNoticeReportDownload();    // ✅ For Notice Management ta
+                             initQueryReportDownload();  
+                             initNoticeReportDownload();
 
                         } else {
                             showNotification("Unauthorized! You are not privileged to access this page.", "error");
@@ -990,6 +994,8 @@ async function initTeachersCorner() {
     initNoticeManagement();
     initDeleteNotice();
      initDepartmentReportDownload();
+     initNoticeReportDownload();    // ✅ For Notice Management tab
+    initQueryReportDownload();  
 }
 // ================= UPLOAD NOTICE FORM =================
 async function initUploadNoticeForm() {
@@ -2487,7 +2493,211 @@ async function initDepartmentReportDownload() {
 }
 
 
+// ================= QUERY REPORT DOWNLOAD =================
+async function initQueryReportDownload() {
+    const form = document.getElementById('generateQueryReportForm');
+    const filterSelect = document.getElementById('queryReportFilter');
+    const startDateInput = document.getElementById('queryStartDate');
+    const endDateInput = document.getElementById('queryEndDate');
+    const msgDiv = document.getElementById('queryReportMsg');
+    
+    if (!form || !filterSelect || !startDateInput || !endDateInput) return;
+    
+    // Set default dates (last 30 days)
+    const today = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    
+    startDateInput.value = thirtyDaysAgo.toISOString().split('T')[0];
+    endDateInput.value = today.toISOString().split('T')[0];
+    
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const filterType = filterSelect.value;
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+        
+        // Validate dates
+        if (startDate && endDate) {
+            if (new Date(startDate) > new Date(endDate)) {
+                showNotification('Start date cannot be after end date', 'error');
+                return;
+            }
+        }
+        
+        try {
+            // Show loading
+            if (msgDiv) {
+                msgDiv.textContent = 'Generating query report...';
+                msgDiv.className = 'form-msg info';
+                msgDiv.style.display = 'block';
+            }
+            
+            // Build API URL
+            let apiUrl = `http://localhost:8080/api/query-reports/generate?filterType=${filterType}`;
+            
+            if (startDate) {
+                apiUrl += `&startDate=${startDate}`;
+            }
+            
+            if (endDate) {
+                apiUrl += `&endDate=${endDate}`;
+            }
+            
+            // Fetch PDF
+            const response = await fetch(apiUrl);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            // Get filename from headers
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = 'query_report.pdf';
+            
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch && filenameMatch[1]) {
+                    filename = filenameMatch[1];
+                }
+            }
+            
+            // Create blob and download
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Show success message
+            if (msgDiv) {
+                msgDiv.textContent = 'Query report downloaded successfully!';
+                msgDiv.className = 'form-msg success';
+                
+                setTimeout(() => {
+                    msgDiv.style.display = 'none';
+                    msgDiv.textContent = '';
+                }, 3000);
+            }
+            
+        } catch (error) {
+            console.error('Failed to download query report:', error);
+            
+            if (msgDiv) {
+                msgDiv.textContent = `Error: ${error.message}`;
+                msgDiv.className = 'form-msg error';
+                msgDiv.style.display = 'block';
+            }
+        }
+    });
+    
+    // Add date validation
+    startDateInput.addEventListener('change', validateDates);
+    endDateInput.addEventListener('change', validateDates);
+    
+    function validateDates() {
+        const start = startDateInput.value;
+        const end = endDateInput.value;
+        
+        if (start && end && new Date(start) > new Date(end)) {
+            startDateInput.style.borderColor = '#dc3545';
+            endDateInput.style.borderColor = '#dc3545';
+        } else {
+            startDateInput.style.borderColor = '';
+            endDateInput.style.borderColor = '';
+        }
+    }
+}
 
+// ================= NOTICE REPORT DOWNLOAD =================
+async function initNoticeReportDownload() {
+    const form = document.getElementById('downloadNoticeReportForm');
+    const deptSelect = document.getElementById('noticeDeptSelect');
+    const deptIdDisplay = document.getElementById('noticeDeptIdDisplay');
+    const msgDiv = document.getElementById('noticeReportMsg');
+    
+    if (!form || !deptSelect) return;
+    
+    // Populate department dropdown
+    try {
+        const departments = await getActiveDepartmentNames();
+        deptSelect.innerHTML = '<option value="">Select department</option>';
+        
+        departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.id;
+            option.textContent = `${dept.name} (ID: ${dept.id})`;
+            deptSelect.appendChild(option);
+        });
+        
+        // Update ID display when selection changes
+        deptSelect.addEventListener('change', function() {
+            deptIdDisplay.value = this.value || '';
+        });
+        
+    } catch (error) {
+        console.error('Failed to load departments:', error);
+        deptSelect.innerHTML = '<option value="">Failed to load departments</option>';
+    }
+    
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const deptId = deptSelect.value;
+        
+        if (!deptId) {
+            showNotification('Please select a department', 'error');
+            return;
+        }
+        
+        try {
+            // Show loading
+            if (msgDiv) {
+                msgDiv.textContent = 'Generating department notice report...';
+                msgDiv.className = 'form-msg info';
+                msgDiv.style.display = 'block';
+            }
+            
+            // Call the NEW API function
+            await downloadDepartmentNoticeReport(deptId);
+            
+            // Clear form
+            deptSelect.value = '';
+            deptIdDisplay.value = '';
+            
+            // Show success message
+            if (msgDiv) {
+                msgDiv.textContent = 'Department notice report downloaded successfully!';
+                msgDiv.className = 'form-msg success';
+                
+                setTimeout(() => {
+                    msgDiv.style.display = 'none';
+                    msgDiv.textContent = '';
+                }, 3000);
+            }
+            
+            showNotification('Notice report downloaded successfully!', 'success');
+            
+        } catch (error) {
+            console.error('Failed to download report:', error);
+            
+            if (msgDiv) {
+                msgDiv.textContent = `Error: ${error.message}`;
+                msgDiv.className = 'form-msg error';
+                msgDiv.style.display = 'block';
+            }
+            
+            showNotification(`Failed to download report: ${error.message}`, 'error');
+        }
+    });
+}  
 // ================= GLOBAL EXPORTS =================
 window.displayNotices = displayNotices;
 window.showNotification = showNotification;

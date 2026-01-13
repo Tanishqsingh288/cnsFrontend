@@ -697,3 +697,55 @@ export async function downloadDepartmentReport(deptId) {
         throw error;
     }
 }
+
+/**
+ * Download Department Notice Report PDF
+ * @param {number} deptId - Department ID
+ */
+export async function downloadDepartmentNoticeReport(deptId) {
+    try {
+        // Call the PDF API endpoint
+        const response = await fetch(`http://localhost:8080/api/reports/department/${deptId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/pdf'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to generate report: ${response.status} ${response.statusText}`);
+        }
+        
+        // Get filename from Content-Disposition header or create default
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = `department_summary_${deptId}.pdf`;
+        
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+            if (filenameMatch && filenameMatch[1]) {
+                filename = filenameMatch[1];
+            }
+        }
+        
+        // Create blob from response
+        const blob = await response.blob();
+        
+        // Create download link and trigger download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Error downloading department notice report:', error);
+        throw error;
+    }
+}
